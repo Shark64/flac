@@ -253,16 +253,16 @@ void FLAC__window_partial_tukey(FLAC__real *window, const FLAC__int32 L, const F
 	else {
 
 		const float k1 = (__M_2PI * (float)N / p); 
-		Np = (FLAC__int32)(p / 2.0f * N);
+		Np = ((FLAC__int32)p / 2 * N);
 
 		for (n = 0; n < start_n && n < L; n++)
 			window[n] = 0.0f;
 		for (i = 1; n < (start_n+Np) && n < L; n++, i++)
-			window[n] = (FLAC__real)(0.5f - 0.5f * cos(k1 * i));
+			window[n] = (FLAC__real)(0.5f - 0.5f * cosf(k1 * i));
 		for (; n < (end_n-Np) && n < L; n++)
 			window[n] = 1.0f;
 		for (i = Np; n < end_n && n < L; n++, i--)
-			window[n] = (FLAC__real)(0.5f - 0.5f * cos(k1 * i));
+			window[n] = (FLAC__real)(0.5f - 0.5f * cosf(k1 * i));
 		for (; n < L; n++)
 			window[n] = 0.0f;
 	}
