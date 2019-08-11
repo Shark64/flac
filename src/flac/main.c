@@ -1520,7 +1520,7 @@ void show_explain(void)
 	printf("             mean that FILE is actually a URL to an image, though this use is\n");
 	printf("             discouraged.\n");
 	printf("           DESCRIPTION is optional; the default is an empty string\n");
-	printf("           The next part specfies the resolution and color information.  If\n");
+	printf("           The next part specifies the resolution and color information.  If\n");
 	printf("             the MIME-TYPE is image/jpeg, image/png, or image/gif, you can\n");
 	printf("             usually leave this empty and they can be detected from the file.\n");
 	printf("             Otherwise, you must specify the width in pixels, height in pixels,\n");
@@ -1610,7 +1610,7 @@ void show_explain(void)
 	printf("                                     does nothing if using -l 0\n");
 	printf("  -q, --qlp-coeff-precision=#        Specify precision in bits of quantized\n");
 	printf("                                     linear-predictor coefficients; 0 => let\n");
-	printf("                                     encoder decide (the minimun is %u, the\n", FLAC__MIN_QLP_COEFF_PRECISION);
+	printf("                                     encoder decide (the minimum is %u, the\n", FLAC__MIN_QLP_COEFF_PRECISION);
 	printf("                                     default is -q 0)\n");
 	printf("  -r, --rice-partition-order=[#,]#   Set [min,]max residual partition order\n");
 	printf("                                     (# is 0 to 15 inclusive; min defaults to 0;\n");
@@ -2173,12 +2173,30 @@ int decode_file(const char *infilename)
 const char *get_encoded_outfilename(const char *infilename)
 {
 	const char *suffix = (option_values.use_ogg? ".oga" : ".flac");
-	return get_outfilename(infilename, suffix);
+	const char *p;
+
+	if(option_values.output_prefix) {
+		p = grabbag__file_get_basename(infilename);
+	}
+	else {
+		p = infilename;
+	}
+
+	return get_outfilename(p, suffix);
 }
 
 const char *get_decoded_outfilename(const char *infilename)
 {
 	const char *suffix;
+	const char *p;
+
+	if(option_values.output_prefix) {
+		p = grabbag__file_get_basename(infilename);
+	}
+	else {
+		p = infilename;
+	}
+
 	if(option_values.analyze) {
 		suffix = ".ana";
 	}
@@ -2197,7 +2215,7 @@ const char *get_decoded_outfilename(const char *infilename)
 	else {
 		suffix = ".wav";
 	}
-	return get_outfilename(infilename, suffix);
+	return get_outfilename(p, suffix);
 }
 
 const char *get_outfilename(const char *infilename, const char *suffix)
